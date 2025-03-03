@@ -2,7 +2,6 @@
 #include <vector>
 #include <py_helper.hpp>
 #include <functional>
-#include <type_traist_notebook/type_traist.hpp>
 template<class T> std::pair<std::string, bool> max_value_check(const std::vector<T> vec, size_t xsize, size_t ysize)
 {
     const T* p = vec.data();
