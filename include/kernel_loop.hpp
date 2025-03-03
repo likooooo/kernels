@@ -40,11 +40,16 @@ namespace kernels
     }
     template<class T, size_t N, bool is_anisotropic = true> constexpr inline std::array<T, N> step_from_shape(const std::array<size_t, N>& shape, T isotropic_step = T(1)/* useless if anisotropic is true */)
     {
-        std::array<T, N> sigma_scala;
-        std::transform(shape.begin(), shape.end(), sigma_scala.begin(), [&](size_t n){
-            return is_anisotropic ? isotropic_step : T(shape.back())/ T(n);
-        });
-        return sigma_scala;
+        if constexpr(is_anisotropic){
+            return default_step<T, N>(isotropic_step);
+        }
+        else{
+            std::array<T, N> sigma_scala;
+            std::transform(shape.begin(), shape.end(), sigma_scala.begin(), [&](size_t n){
+                return  T(shape.back())/ T(n);
+            });
+            return sigma_scala;
+        }
     }
     template<class T, size_t N, class PixelFunc> inline void center_zero_loop_inv_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
