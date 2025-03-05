@@ -16,15 +16,18 @@ void test(size_t xsize, size_t ysize, T freq, T crao, T azimuth)
         ysize, xsize, crao, azimuth, freq
     );
 
+    // compare bloch phase with shift-kernel
     std::vector<complex_t<T>> vec(xsize * ysize);
     kernels::bloch_phase<T, 2>(vec.data(), {ysize, xsize}, freq, crao, azimuth);
     std::vector<T> real_part(xsize * ysize);
     std::transform(vec.begin(), vec.end(), real_part.begin(), [](auto c){return c.real();});
+
+    kernels::phase_modulate<T, 2>(vec.data(), {ysize, xsize}, {std::sin(crao) * std::sin(azimuth)*freq, std::sin(crao) * std::cos(azimuth)*freq});
     std::vector<T> imag_part(xsize * ysize);
     std::transform(vec.begin(), vec.end(), imag_part.begin(), [](auto c){return c.real();});
-
     imshow(real_part, {(int)xsize, (int)ysize});
-    // imshow(imag_part, {(int)xsize, (int)ysize});
+    imshow(imag_part, {(int)xsize, (int)ysize});
+    // imshow(real_part - imag_part, {(int)xsize, (int)ysize});
 }
 
 
@@ -40,5 +43,11 @@ int main()
     {
         constexpr bool enable_anisotropic = true;
         test<double, !enable_anisotropic>(x, x, freq, crao * M_PI, azimuth * M_PI);
+        
+        std::vector<complex_t<double>> vec(x * x);
+        kernels::free_propagation<double, 2>(vec.data(), {x, x}, kernels::default_step<double, 2>(0.01), freq, crao);
+        std::vector<double> real_part(x * x);
+        std::transform(vec.begin(), vec.end(), real_part.begin(), [](auto c){return c.real();});
+        imshow(real_part, {(int)x, (int)x});
     }
 }

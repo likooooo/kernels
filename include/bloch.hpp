@@ -15,4 +15,35 @@ namespace kernels
             p++;
         });
     }
+    template<class T, size_t N>inline void phase_modulate(
+        complex_t<T>* p, const std::array<size_t, N>& shape, const std::array<T, N>& shift_pixel)
+    {
+        complex_t<T> TWOPI = complex_t<T>(0, -2 * M_PI);
+        center_zero_loop_distance_2<T, N>(shape, default_step<T, N>(1), 
+            [&](const std::array<T, N>& index, T kr){
+                T sum = 0;
+                for(size_t i = 0; i < N; i++){
+                    sum += shift_pixel[i] * index[i] / shape[i]; 
+                }
+                complex_t<T> phase = TWOPI * sum; 
+                *p = std::exp(phase);
+                p++;
+            }
+        );
+    }
+    template<class T, size_t N>inline void free_propagation(
+        complex_t<T>* p, const std::array<size_t, N>& shape, const std::array<T, N>& step, 
+        T freq, T dist, complex_t<T> nk = complex_t<T>(1))
+    {
+        const complex_t<T> dielectric = nk * nk;
+        complex_t<T> rDZTWOPI = complex_t<T>(0, 1) * T(2 * M_PI) * freq * dist;
+        center_zero_loop_distance_2<T, N>(shape, step, 
+            [&](const std::array<T, N>& pos, T kr){
+                complex_t<T> phase = rDZTWOPI * std::sqrt(dielectric - kr); 
+                *p = std::exp(phase);
+                p++;
+            }
+        );
+    }
+
 }

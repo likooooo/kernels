@@ -51,7 +51,7 @@ namespace kernels
             return sigma_scala;
         }
     }
-    template<class T, size_t N, class PixelFunc> inline void center_zero_loop_inv_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    template<class T, size_t N, class PixelFunc> inline void center_zero_loop_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
             std::array<T, N> index_center_zero;
@@ -62,6 +62,21 @@ namespace kernels
                 sum_sq += index_center_zero[i] * index_center_zero[i];
             }
             func(index_center_zero, sum_sq);
+        });
+    }
+    template<class T, size_t N, class PixelFunc> inline void corner_zero_loop_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    {
+        kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
+            std::array<T, N> pos;
+            T sum_sq = 0;
+            
+            for (size_t i = 0; i < N; ++i) 
+            {
+                size_t n = indices[i] - shape[i] * int(indices[i] >= shape[i]/2);
+                pos[i] = static_cast<T>(n) * step[i];
+                sum_sq += pos[i] * pos[i];
+            }
+            func(pos, sum_sq);
         });
     }
 }
