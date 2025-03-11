@@ -11,7 +11,7 @@ namespace kernels
         }
         std::array<T, N> sigma_scala = step_from_shape<T, N, is_anisotropic>(shape);
         
-        const T sqrt_2pi = std::sqrt(T(M_PI * 2));
+        const T sqrt_2pi = std::sqrt(T(2_PI));
         const T norm = std::accumulate(sigma_scala.begin(), sigma_scala.end(),
             T(1.0) / std::pow(sigma * sqrt_2pi, N),
             [](T a, T b){return a * b;}

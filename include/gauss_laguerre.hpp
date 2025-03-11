@@ -61,7 +61,7 @@ namespace kernels{
         center_zero_loop_distance_2<real, N>(shape, steps, 
             [&](const std::array<real, N>& pos, real r){
                 real t = r / sigma_2;
-                complex_t<T> theta = norm * associated_theta<T, 2>(associated_order, pos, sigma);
+                complex_t<T> theta = norm * associated_theta<T, 2>(associated_order, pos, 1);
                 // if(r <= sigma)
                 {
                     if constexpr(is_complex_v<T>){

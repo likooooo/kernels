@@ -10,7 +10,7 @@ namespace kernels
         const auto [ysize, xsize] = shape;
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
             const auto [y, x] = indices;
-            T phase_term = 2 * M_PI * freq * (k.real() * x /xsize + k.imag() * y / ysize);
+            T phase_term = 2_PI * freq * (k.real() * x /xsize + k.imag() * y / ysize);
             *p = complex_t<T>(std::cos(phase_term), std::sin(phase_term));
             p++;
         });
@@ -18,7 +18,7 @@ namespace kernels
     template<class T, size_t N>inline void phase_modulate(
         complex_t<T>* p, const std::array<size_t, N>& shape, const std::array<T, N>& shift_pixel)
     {
-        complex_t<T> TWOPI = complex_t<T>(0, -2 * M_PI);
+        complex_t<T> TWOPI = complex_t<T>(0, -2_PI);
         center_zero_loop_distance_2<T, N>(shape, default_step<T, N>(1), 
             [&](const std::array<T, N>& index, T kr){
                 T sum = 0;
@@ -36,7 +36,7 @@ namespace kernels
         T freq, T dist, complex_t<T> nk = complex_t<T>(1))
     {
         const complex_t<T> dielectric = nk * nk;
-        complex_t<T> rDZTWOPI = complex_t<T>(0, 1) * T(2 * M_PI) * freq * dist;
+        complex_t<T> rDZTWOPI = complex_t<T>(0, 1) * T(2_PI) * freq * dist;
         center_zero_loop_distance_2<T, N>(shape, step, 
             [&](const std::array<T, N>& pos, T kr){
                 complex_t<T> phase = rDZTWOPI * std::sqrt(dielectric - kr); 

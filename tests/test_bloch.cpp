@@ -30,7 +30,6 @@ void test(size_t xsize, size_t ysize, T freq, T crao, T azimuth)
     // imshow(real_part - imag_part, {(int)xsize, (int)ysize});
 }
 
-
 int main()
 {
     py_loader::init();
