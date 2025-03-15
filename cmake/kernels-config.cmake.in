@@ -1,0 +1,4 @@
+set(KERNELS_VERSION "@PACKAGE_VERSION@")
+find_package(mekil REQUIRED)
+find_package(py_visualizer REQUIRED)
+find_package(type_traist_notebook REQUIRED)

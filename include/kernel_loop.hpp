@@ -51,7 +51,7 @@ namespace kernels
             return sigma_scala;
         }
     }
-    template<class T, size_t N, class PixelFunc> inline void center_zero_loop_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    template<class T, size_t N, class PixelFunc> inline void center_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
             std::array<T, N> index_center_zero;
@@ -64,7 +64,7 @@ namespace kernels
             func(index_center_zero, sum_sq);
         });
     }
-    template<class T, size_t N, class PixelFunc> inline void corner_zero_loop_distance_2(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    template<class T, size_t N, class PixelFunc> inline void corner_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
             std::array<T, N> pos;

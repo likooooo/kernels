@@ -58,7 +58,7 @@ namespace kernels{
         const std::array<real, N> steps = step_from_shape<real, N, is_anisotropic>(shape);
         const real sigma_2 = sigma * sigma;
         const real norm = 1.0 / (M_PI * sigma_2);
-        center_zero_loop_distance_2<real, N>(shape, steps, 
+        center_zero_loop_square_r<real, N>(shape, steps, 
             [&](const std::array<real, N>& pos, real r){
                 real t = r / sigma_2;
                 complex_t<T> theta = norm * associated_theta<T, 2>(associated_order, pos, 1);

@@ -18,7 +18,7 @@ namespace kernels
         );
         const T sigma_2 = 2 * sigma * sigma;
         
-        center_zero_loop_distance_2<T, N>(shape, sigma_scala, 
+        center_zero_loop_square_r<T, N>(shape, sigma_scala, 
             [&](const std::array<T, N>& pos, T r){
                 *p = norm * std::exp(-r / sigma_2); 
                 p++;
