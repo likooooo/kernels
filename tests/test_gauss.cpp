@@ -58,7 +58,7 @@ void test(size_t xsize, size_t ysize, T sigma)
             printf("    %s check success\n", str.c_str());
         } else{
             printf("    \033[31m%s check failed\033[0m\n", str.c_str());
-            imshow(vec, {(int)xsize, (int)ysize});
+            imshow(vec, {xsize, ysize});
         }
     }
     printf("\n");

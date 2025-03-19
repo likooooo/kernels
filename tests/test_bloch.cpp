@@ -25,9 +25,9 @@ void test(size_t xsize, size_t ysize, T freq, T crao, T azimuth)
     kernels::phase_modulate<T, 2>(vec.data(), {ysize, xsize}, {std::sin(crao) * std::sin(azimuth)*freq, std::sin(crao) * std::cos(azimuth)*freq});
     std::vector<T> imag_part(xsize * ysize);
     std::transform(vec.begin(), vec.end(), imag_part.begin(), [](auto c){return c.real();});
-    imshow(real_part, {(int)xsize, (int)ysize});
-    imshow(imag_part, {(int)xsize, (int)ysize});
-    // imshow(real_part - imag_part, {(int)xsize, (int)ysize});
+    imshow(real_part, {xsize, ysize});
+    imshow(imag_part, {xsize, ysize});
+    // imshow(real_part - imag_part, {xsize, ysize});
 }
 
 int main()
@@ -47,6 +47,6 @@ int main()
         kernels::free_propagation<double, 2>(vec.data(), {x, x}, kernels::default_step<double, 2>(0.01), freq, crao);
         std::vector<double> real_part(x * x);
         std::transform(vec.begin(), vec.end(), real_part.begin(), [](auto c){return c.real();});
-        imshow(real_part, {(int)x, (int)x});
+        imshow(real_part, {x, x});
     }
 }

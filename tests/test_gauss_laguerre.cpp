@@ -19,7 +19,7 @@ void test(size_t xsize, size_t ysize, T sigma, int order, int associate)
 
     std::vector<T> vec(xsize * ysize);
     kernels::gauss_laguerre<T, 2, is_anisotropic>(vec.data(), {ysize, xsize}, sigma, order, associate);
-    imshow(vec, {(int)xsize, (int)ysize});
+    imshow(vec, {xsize, ysize});
 }
 
 template<class T, class FuncConvWithKernel> std::vector<std::vector<T>> gauss_laguerre_conv_linear(const std::array<size_t, 2> shape, T sigma, size_t max_associated_order, size_t max_laguerre_order, FuncConvWithKernel&& conv_image_with)
