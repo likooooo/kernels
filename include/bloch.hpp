@@ -3,22 +3,23 @@
 
 namespace kernels
 {
-    template<class T, size_t N> inline void bloch_phase(complex_t<T>* p, const std::array<size_t, N>& shape,T freq,  T crao, T azimuth)
+    template<class T, size_t N> inline void bloch_phase(complex_t<T>* p, const std::array<size_t, N>& shape, T freq,  vec2<T> k)
     {
         static_assert(N == 2);
-        complex_t<T> k =  std::sin(crao) * std::exp(complex_t<T>(0, 1) * azimuth);
         const auto [ysize, xsize] = shape;
-        kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
+        kernel_loop<T, N>(shape, [&](const std::array<T, N>& useless_center, const std::array<size_t, N>& indices) {
+        // center_zero_loop_square_r<T, N>(shape, default_step<T, N>(1), 
+        //     [&](const std::array<T, N>& indices, T kr){
             const auto [y, x] = indices;
-            T phase_term = 2_PI * freq * (k.real() * x /xsize + k.imag() * y / ysize);
-            *p = complex_t<T>(std::cos(phase_term), std::sin(phase_term));
+            complex_t<T> TWOPI = 2_PI_I;
+            *p = std::exp(TWOPI * (freq * (k.at(1) * x /xsize + k.at(0) * y / ysize)));
             p++;
         });
     }
     template<class T, size_t N>inline void phase_modulate(
         complex_t<T>* p, const std::array<size_t, N>& shape, const std::array<T, N>& shift_pixel)
     {
-        complex_t<T> TWOPI = -2_PI_I;//complex_t<T>(0, -2_PI);
+        complex_t<T> TWOPI = 2_PI_I;
         center_zero_loop_square_r<T, N>(shape, default_step<T, N>(1), 
             [&](const std::array<T, N>& index, T kr){
                 T sum = 0;

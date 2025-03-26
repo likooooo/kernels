@@ -61,8 +61,7 @@ template<class T> std::vector<T> quadratic_coefficients_diagonalize(const std::v
 
 int main()
 {
-    py_loader::init();
-    py_plot::get_default_visualizer_dir() = "/usr/local/bin";
+    py_engine::init();
     // TODO : test case for 1D & 3D
     for(int associate  : {0, 1, 2})
     for(int order : {0, 1})

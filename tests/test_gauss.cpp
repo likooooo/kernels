@@ -65,8 +65,7 @@ void test(size_t xsize, size_t ysize, T sigma)
 }
 int main()
 {
-    py_loader::init();
-    py_plot::get_default_visualizer_dir() = "/usr/local/bin";
+    py_engine::init();
     // TODO : test case for 1D & 3D
     for(auto ratio : {0.1, 0.12, 0.15, 0.2})
     for(size_t x : {8, 15, 16, 31, 32, 63, 64, 127, 128, 255, 256, 512, 1280})
