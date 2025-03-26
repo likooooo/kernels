@@ -76,3 +76,9 @@ int main()
         // test<float, !enable_anisotropic>(x, x, 0.1 * x, order);
     }
 }
+BOOST_PYTHON_MODULE(lib_test_gauss_laguerre) 
+{
+    py_engine::init();
+    boost::python::def("gauss_laguerre",  test<double, false>);
+    boost::python::def("gauss_laguerreV1",  test<double, true>);
+}

@@ -46,7 +46,11 @@ namespace kernels{
                 cos * sin * 2
             );
         }
-        printf("unimplement associated_order=%d\n", associated_order);
+        else{
+            real_t<T> theta = std::atan2(pos[0], pos[1]);
+            return std::exp(complex_t<T>(1_I) * (3 * theta)) * std::hypot(pos[1], pos[0])/sigma;
+        }
+        // printf("unimplement associated_order=%d\n", associated_order);
         return 1;
     }
 
