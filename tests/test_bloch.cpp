@@ -58,6 +58,7 @@ void auto_test_bloch()
 BOOST_PYTHON_MODULE(lib_test_bloch) 
 {
     py_engine::init();
+    py_engine::init_exception_for_pycall();
     boost::python::def("test_bloch", test_bloch<double, false>);
     boost::python::def("auto_test_bloch", auto_test_bloch);
 }

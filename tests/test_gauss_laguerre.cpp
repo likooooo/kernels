@@ -79,6 +79,7 @@ int main()
 BOOST_PYTHON_MODULE(lib_test_gauss_laguerre) 
 {
     py_engine::init();
+    py_engine::init_exception_for_pycall();
     boost::python::def("gauss_laguerre",  test<double, false>);
     boost::python::def("gauss_laguerreV1",  test<double, true>);
 }
