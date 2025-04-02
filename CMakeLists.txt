@@ -4,7 +4,6 @@ project(kernels
     HOMEPAGE_URL "https://github.com/likooooo/kernels"
     LANGUAGES CXX
 )
-find_package(mekil REQUIRED)
 find_package(py_visualizer REQUIRED)
 find_package(type_traist_notebook REQUIRED)
 

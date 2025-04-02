@@ -1,5 +1,6 @@
-include_directories(../include)
+find_package(mekil REQUIRED)
 
+include_directories(../include)
 file(GLOB tools ${CMAKE_CURRENT_LIST_DIR}/test_*.cpp)
 foreach(tool IN LISTS tools)
     get_filename_component(test_WLE ${tool} NAME_WLE)
