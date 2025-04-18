@@ -9,7 +9,7 @@
 namespace kernels
 {
     template<class TPos, size_t N, class PixelFunc, size_t Dim = 0>
-    inline void __kernel_loop_impl(const std::array<size_t, N>& shape, const std::array<TPos, N>& center, PixelFunc&& func, std::array<size_t, N>& indices) 
+    constexpr inline void __kernel_loop_impl(const std::array<size_t, N>& shape, const std::array<TPos, N>& center, PixelFunc&& func, std::array<size_t, N>& indices) 
     {
         if constexpr (Dim < N) 
         {
@@ -25,16 +25,17 @@ namespace kernels
     }
 
     template<class T, size_t N, class PixelFunc>
-    inline void kernel_loop(const std::array<size_t, N>& shape, PixelFunc&& func) 
+    constexpr inline void kernel_loop(const std::array<size_t, N>& shape, PixelFunc&& func) 
     {
-        std::array<T, N> center;
-        std::transform(shape.begin(), shape.end(), center.begin(), [](size_t i){return T(i) / 2;});
+        std::array<T, N> center{};
+        // std::transform(shape.begin(), shape.end(), center.begin(), [](size_t i){return T(i) / 2;});
+        for(size_t i = 0; i < N; i++) center.at(i) = shape.at(i) / 2;
         std::array<size_t, N> indices{};
         __kernel_loop_impl<T>(shape, center, std::forward<PixelFunc>(func), indices);
     }
     template<class T,size_t N> constexpr inline std::array<T, N> default_step(T step = T(1))
     {
-        std::array<T, N> isotropic_step;
+        std::array<T, N> isotropic_step{};
         for(size_t i = 0; i < N; i++) isotropic_step[i] = step;
         return isotropic_step;
     }
@@ -44,17 +45,18 @@ namespace kernels
             return default_step<T, N>(isotropic_step);
         }
         else{
-            std::array<T, N> sigma_scala;
-            std::transform(shape.begin(), shape.end(), sigma_scala.begin(), [&](size_t n){
-                return  T(shape.back())/ T(n);
-            });
+            std::array<T, N> sigma_scala{};
+            for(size_t i = 0; i < N; i++) sigma_scala.at(i) = T(shape.back())/ T(shape.at(i));
+            // std::transform(shape.begin(), shape.end(), sigma_scala.begin(), [&](size_t n){
+            //      return  T(shape.back())/ T(n);
+            // });
             return sigma_scala;
         }
     }
-    template<class T, size_t N, class PixelFunc> inline void center_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    template<class T, size_t N, class PixelFunc> constexpr inline void center_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
-            std::array<T, N> index_center_zero;
+            std::array<T, N> index_center_zero{};
             T sum_sq = 0;
             for (size_t i = 0; i < N; ++i) 
             {
@@ -64,10 +66,10 @@ namespace kernels
             func(index_center_zero, sum_sq);
         });
     }
-    template<class T, size_t N, class PixelFunc> inline void corner_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
+    template<class T, size_t N, class PixelFunc> constexpr inline void corner_zero_loop_square_r(const std::array<size_t, N>& shape, const std::array<T, N>& step, PixelFunc&& func)
     {
         kernel_loop<T, N>(shape, [&](const std::array<T, N>& center, const std::array<size_t, N>& indices) {
-            std::array<T, N> pos;
+            std::array<T, N> pos{};
             T sum_sq = 0;
             
             for (size_t i = 0; i < N; ++i) 
