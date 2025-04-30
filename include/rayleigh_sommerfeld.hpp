@@ -2,6 +2,7 @@
 #include "kernel_loop.hpp"
 namespace kernels
 {
+    //== from virtual lab
     template<class T> inline void rayleigh_sommerfeld_kernel(complex_t<T>* p, const vec2<size_t>& shape, const vec2<T>& step, T lambda,T dz)
     {
         complex_t<T> ik = 2_PI_I / lambda;
