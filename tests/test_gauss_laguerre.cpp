@@ -2,7 +2,6 @@
 #include <vector>
 #include <py_helper.hpp>
 #include <functional>
-#include <mekil/mkl_wrapper.hpp>
 
 template<class T, bool is_anisotropic = false>
 void test(size_t xsize, size_t ysize, T sigma, int order, int associate)
